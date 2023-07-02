@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Button, InputLabel, Modal, TextField, Typography } from "@mui/material"
 import { useDataContext } from "../context/DataContext";
 
@@ -17,43 +17,19 @@ const style = {
   };
 
 export const EditModal = () => {
-    const {openEdit, setOpenEdit,addPost}=useDataContext();
-    const handleClose = () => setOpenEdit(false);
-
-    const handelSignUp=(event)=>{
+    const {openEdit, setOpenEdit,itemToEdit,setItemToEdit,editPost}=useDataContext();
+    const handleClose = () => {setOpenEdit(false);setItemToEdit("")};
+  
+    const handelEdit=(event)=>{
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        if(data.get("imgUrl")===""){
-            const itemData={
-                id:uuidv4(),
-                imgUrl:
-                "https://picsum.photos/200/200",
-                name: data.get("name"),
-                ingredients: data.get("ingredients"),
-                instructions: data.get("instructions"),
-                cuisine: data.get("cuisine"),
-               
-               }
-               addPost(itemData)
-               handleClose()
-
-        }
-        else{
-            const itemData={
-                id:uuidv4(),
-                imgUrl:
-                data.get("imgUrl"),
-                name: data.get("name"),
-                ingredients: data.get("ingredients"),
-                instructions: data.get("instructions"),
-                cuisine: data.get("cuisine"),
-               
-               }
-               addPost(itemData)
-               handleClose()
-        }
+       
+        editPost(itemToEdit)
+        handleClose()
     }
+   
+   
   return (
+
     <Modal
     open={openEdit}
     onClose={handleClose}
@@ -64,7 +40,7 @@ export const EditModal = () => {
         Edit item
     <Box
         component="form"
-        onSubmit={handelSignUp}
+        onSubmit={handelEdit}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -73,6 +49,7 @@ export const EditModal = () => {
         }}
       >
         <TextField
+          sx={{marginTop:"10px"}}
           size="small"
           halfWidth
           id="imgUrl"
@@ -80,9 +57,12 @@ export const EditModal = () => {
           type="imgUrl"
           autoFocus
           label="ImgUrl"
+          value={itemToEdit?.imgUrl}
+          onChange={(e)=>setItemToEdit(prev=>({...prev,imgUrl:e.target.value}))}
         />
     
         <TextField
+          sx={{marginTop:"10px"}}
           size="small"
           halfWidth
           required
@@ -91,9 +71,12 @@ export const EditModal = () => {
           type="name"
           autoFocus
           label="Name"
+          value={itemToEdit?.name}
+          onChange={(e)=>setItemToEdit(prev=>({...prev,name:e.target.value}))}
         />
         
         <TextField
+          sx={{marginTop:"10px"}}
           size="small"
           halfWidth
           required
@@ -102,8 +85,11 @@ export const EditModal = () => {
           type="ingredients"
           autoFocus
           label="Ingredients"
+          value={itemToEdit?.ingredients}
+          onChange={(e)=>setItemToEdit(prev=>({...prev,ingredients:e.target.value}))}
         />
           <TextField
+            sx={{marginTop:"10px"}}
           size="small"
           halfWidth
           required
@@ -112,8 +98,11 @@ export const EditModal = () => {
           type="instructions"
           autoFocus
           label="Instructions"
+          value={itemToEdit?.instructions}
+          onChange={(e)=>setItemToEdit(prev=>({...prev,instructions:e.target.value}))}
         />
           <TextField
+            sx={{marginTop:"10px"}}
           size="small"
           halfWidth
           required
@@ -122,6 +111,8 @@ export const EditModal = () => {
           type="cuisine"
           autoFocus
           label="Cuisine"
+          value={itemToEdit?.cuisine}
+          onChange={(e)=>setItemToEdit(prev=>({...prev,cuisine:e.target.value}))}
         />
         
         <Button
@@ -130,7 +121,7 @@ export const EditModal = () => {
           variant="contained"
           sx={{ mt: 3, mb: 1 }}
         >
-          ADD
+         Edit
         </Button>
 
         </Box>

@@ -10,35 +10,39 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useDataContext } from "../context/DataContext";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ItemCard } from "../components/itemCard";
 import { FormModal } from "../components/FormModal";
+import { EditModal } from "../components/EditModal";
 
 export const Home = () => {
- 
- const {value, setValue,setOpen,recipe}=useDataContext();
- const[searchValue,setSearchValue]=useState("");
- const[searchedItems,setSearchedItems]=useState([]);
- 
+  const { setOpen, recipe } = useDataContext();
+  //values of checkbox
+  const [value, setValue] = useState("name");
+  //values of search
+  const [searchValue, setSearchValue] = useState("");
 
- const ItemsToShow=searchValue==="" ? recipe:searchedItems
- const handleOpen = () => setOpen(true);
+  let ItemsToShow = recipe;
+  if (searchValue) {
+    const requiredItems = recipe?.filter((data) =>
+      data[value].toLowerCase().includes(searchValue.toLowerCase())
+    );
+    ItemsToShow = requiredItems;
+  }
+
+  const handleOpen = () => setOpen(true);
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
-  const searchItem=(text)=>{
-    
-    setSearchValue(text)
-    const requiredItems=recipe?.filter(data=>data[value].toLowerCase().includes(text.toLowerCase()))
-    console.log(searchValue)
-    setSearchedItems(requiredItems);
-
-  }
+  const searchItem = (text) => {
+    setSearchValue(text);
+  };
 
   return (
     <Box>
-      <FormModal/>
+      <FormModal />
+      <EditModal />
       <Box
         sx={{
           display: "flex",
@@ -53,14 +57,15 @@ export const Home = () => {
             type="search"
             variant="outlined"
             size="small"
-            onChange={(e)=>searchItem(e.target.value)}
-
+            onChange={(e) => searchItem(e.target.value)}
           />
         </Box>
-  
+
         <Box>
           <FormControl>
-          <FormLabel id="demo-row-radio-buttons-group-label">Filters:</FormLabel>
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Filters:
+            </FormLabel>
             <RadioGroup
               row
               aria-labelledby="demo-controlled-radio-buttons-group"
@@ -68,12 +73,12 @@ export const Home = () => {
               value={value}
               onChange={handleChange}
             >
+              <FormControlLabel value="name" control={<Radio />} label="Name" />
               <FormControlLabel
-                value="name"
+                value="ingredients"
                 control={<Radio />}
-                label="Name"
+                label="Ingredients"
               />
-              <FormControlLabel value="ingredients" control={<Radio />} label="Ingredients" />
               <FormControlLabel
                 value="cuisine"
                 control={<Radio />}
@@ -81,28 +86,26 @@ export const Home = () => {
               />
             </RadioGroup>
           </FormControl>
-         
         </Box>
       </Box>
       <Typography variant="h4">All Recipes:</Typography>
 
-      <Box sx={{display:"flex"}}>
-        <Box sx={{height:"15px",width:"15px",border:"1px solid black",padding:"10px"}} onClick={handleOpen}>
-          <AddCircleIcon />
+      <Box sx={{ display: "flex" }}>
+        <Box onClick={handleOpen}>
+          <AddCircleIcon
+            sx={{
+              height: "2rem",
+              width: "2rem",
+            }}
+          />
         </Box>
-        <Box sx={{display:"flex"}}>
-          {ItemsToShow?.length===0 && <Typography>No Items found</Typography>}
-          {ItemsToShow?.map(itemData=>
-            
-              <ItemCard key={itemData.id} itemData={itemData}/>
-            
-              
-            
-          )}
-       
+        <Box sx={{ display: "flex",flexWrap:"wrap" }}>
+          {ItemsToShow?.length === 0 && <Typography>No Items found</Typography>}
+          {ItemsToShow?.map((itemData) => (
+            <ItemCard key={itemData.id} itemData={itemData} />
+          ))}
         </Box>
       </Box>
-      
     </Box>
   );
 };

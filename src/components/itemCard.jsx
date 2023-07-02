@@ -4,13 +4,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from "react-router-dom";
 import { useDataContext } from "../context/DataContext";
 export const ItemCard = ({itemData}) => {
-    const {deletePost,openEdit, setOpenEdit}=useDataContext();
+    const {deletePost,openEdit, setOpenEdit,itemToEdit,setItemToEdit}=useDataContext();
     const navigate=useNavigate();
 
     const navigateToDetails=()=>{
         navigate(`/singleItem/${itemData?.id}`)
     }
-    const handleOpen = () => setOpenEdit(true);
+    const handleOpen = () =>{setOpenEdit(true);setItemToEdit(itemData)};
    
   return (
    <Paper sx={{width:"200px",margin:"10px"}}elevation={5}>
@@ -21,12 +21,12 @@ export const ItemCard = ({itemData}) => {
 
     </Box>
     <Box>
-        <img src={itemData?.imgUrl} alt="itemImage"/>
+        <img  src={itemData?.imgUrl} width="200" height="200" alt="itemImage"/>
     </Box>
     <Box>
         <Typography>Cuisine Type: {itemData?.name}</Typography>
-        <Typography>Ingredients: <Link onClick={navigateToDetails}>See Details</Link></Typography>
-        <Typography>Instructions: <Link onClick={navigateToDetails}>See Details</Link></Typography>
+        <Typography>Ingredients: <Link sx={{cursor:"pointer"}} onClick={navigateToDetails}>See Details</Link></Typography>
+        <Typography>Instructions: <Link sx={{cursor:"pointer"}} onClick={navigateToDetails}>See Details</Link></Typography>
     </Box>
    </Paper>
   )

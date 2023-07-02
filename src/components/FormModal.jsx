@@ -74,6 +74,7 @@ export const FormModal = () => {
             }}
           >
             <TextField
+            sx={{marginTop:"10px"}}
               size="small"
               halfWidth
               id="imgUrl"
@@ -84,6 +85,7 @@ export const FormModal = () => {
             />
         
             <TextField
+            sx={{marginTop:"10px"}}
               size="small"
               halfWidth
               required
@@ -95,6 +97,7 @@ export const FormModal = () => {
             />
             
             <TextField
+            sx={{marginTop:"10px"}}
               size="small"
               halfWidth
               required
@@ -105,6 +108,7 @@ export const FormModal = () => {
               label="Ingredients"
             />
               <TextField
+              sx={{marginTop:"10px"}}
               size="small"
               halfWidth
               required
@@ -115,6 +119,7 @@ export const FormModal = () => {
               label="Instructions"
             />
               <TextField
+              sx={{marginTop:"10px"}}
               size="small"
               halfWidth
               required

@@ -30,18 +30,16 @@ export const DataContextProvider=({children})=>{
         "cuisine": "American"
       }
     ]);
-
-    //values of checkbox
-    const [value, setValue] = useState("name");
+    
     //state of modal
     const [open, setOpen] =useState(false);
     //state of editmodal
     const [openEdit, setOpenEdit] =useState(false);
+    //item to edit
+    const [itemToEdit,setItemToEdit]=useState("");
 
     const localStorageRecipes = localStorage.getItem('foodRecipes');
   const getRecipe=()=>{
-   
-   
     if (localStorageRecipes) {
         setRecipe(JSON.parse(localStorageRecipes)) ;
       } else {
@@ -49,21 +47,28 @@ export const DataContextProvider=({children})=>{
       }
   }
 
-
-
     const addPost=(itemData)=>{
         const updatedRecipes=[...recipe,itemData];
         localStorage.setItem('foodRecipes', JSON.stringify(updatedRecipes));
+       setRecipe(updatedRecipes);
     }
     const deletePost=(itemData)=>{
       const updatedRecipes=recipe.filter(({id})=>id!==itemData?.id);
       localStorage.setItem('foodRecipes', JSON.stringify(updatedRecipes));
+     setRecipe(updatedRecipes);
+  }
+
+  const editPost=(updatedItemData)=>{
+    const updatedRecipes=recipe.map((data)=>data?.id===updatedItemData?.id ? updatedItemData : data);
+    localStorage.setItem('foodRecipes', JSON.stringify(updatedRecipes));
+     setRecipe(updatedRecipes);
+
   }
     
-    useEffect(()=>getRecipe(),[recipe])
+    useEffect(()=>getRecipe(),[])
     
     return(
-        <DataContext.Provider value={{value, setValue,open, setOpen,addPost,deletePost,recipe,setRecipe,openEdit, setOpenEdit}}>
+        <DataContext.Provider value={{open, setOpen,addPost,deletePost,recipe,setRecipe,openEdit, setOpenEdit,itemToEdit,setItemToEdit,editPost}}>
             {children}
         </DataContext.Provider>
     )
